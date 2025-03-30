@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orden Confirmada</title>
+    <style>
+        body {
+            background-color: #FFD700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            text-align: center;
+        }
+        .button {
+            background-color: green;
+            border: none;
+            padding: 12px 24px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin: 10px;
+        }
+        .button:hover {
+            transform: scale(1.1);
+            background-color: #004d00;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let numeroOrden = localStorage.getItem("numeroOrden") || "000000";
+            document.getElementById("numeroOrden").innerText = numeroOrden;
+        });
+    </script>
+</head>
+<body>
+    <h1>¡Orden Confirmada!</h1>
+    <div class="container">
+        <p>Tu número de orden es: <strong id="numeroOrden">000000</strong></p>
+        <p>Por favor, preséntalo al momento de recoger tu pedido.</p>
+        <a href="index.html" class="button">🏠 Volver a Inicio</a>
+    </div>
+</body>
+</html>

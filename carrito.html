@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - La Mancha</title>
+    <style>
+        body {
+            background-color: #FFD700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .cart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            text-align: center;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .button {
+            background-color: green;
+            border: none;
+            padding: 12px 24px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin: 5px;
+        }
+        .button:hover {
+            transform: scale(1.1);
+            background-color: #004d00;
+        }
+    </style>
+    <script>
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartContainer = document.getElementById("cart-items");
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = "<p>Tu carrito está vacío.</p>";
+                document.getElementById("total-price").innerText = "Total: $0.00";
+                return;
+            }
+
+            cartContainer.innerHTML = "";
+            cart.forEach((product, index) => {
+                let itemTotal = product.price * product.quantity;
+                totalPrice += itemTotal;
+                let itemDiv = document.createElement("div");
+                itemDiv.classList.add("cart-item");
+                itemDiv.innerHTML = `
+                    <p><strong>${product.id === "CremaPollo" ? "Crema de Plátano con Pollo" : "Crema de Plátano con Camarones"}</strong></p>
+                    <p>Precio: $${product.price.toFixed(2)}</p>
+                    <p>Cantidad: <input type="number" value="${product.quantity}" min="1" max="100" onchange="updateQuantity(${index}, this.value)"></p>
+                    <p>Total: $${itemTotal.toFixed(2)}</p>
+                    <button onclick="removeFromCart(${index})">Eliminar</button>
+                `;
+                cartContainer.appendChild(itemDiv);
+            });
+            document.getElementById("total-price").innerText = `Total: $${totalPrice.toFixed(2)}`;
+        }
+
+        function updateQuantity(index, quantity) {
+            let cart = JSON.parse(localStorage.getItem("cart"));
+            cart[index].quantity = parseInt(quantity);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            loadCart();
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem("cart"));
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            loadCart();
+        }
+
+        function proceedToCheckout() {
+            if (JSON.parse(localStorage.getItem("cart")).length === 0) {
+                alert("El carrito está vacío.");
+                return;
+            }
+            window.location.href = "pago.html";
+        }
+
+        function clearCart() {
+            localStorage.removeItem("cart");
+            loadCart();
+        }
+    </script>
+</head>
+<body onload="loadCart()">
+    <h1>Carrito de Compras</h1>
+    <div class="cart-container" id="cart-items">
+        <p>Tu carrito está vacío.</p>
+    </div>
+    <h2 id="total-price">Total: $0.00</h2>
+    <button class="button" onclick="proceedToCheckout()">💳 Proceder al Pago</button>
+    <button class="button" onclick="clearCart()">🗑 Vaciar Carrito</button>
+    <a href="menu.html" class="button">⬅ Volver al Menú</a>
+    <a href="index.html" class="button">🏠 Volver a Inicio</a>
+</body>
+</html>

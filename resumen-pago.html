@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Pago</title>
+    <style>
+        body {
+            background-color: #FFD700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            text-align: center;
+        }
+        .button {
+            background-color: green;
+            border: none;
+            padding: 12px 24px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin: 10px;
+        }
+        .button:hover {
+            transform: scale(1.1);
+            background-color: #004d00;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let metodoPago = localStorage.getItem("metodoPago") || "No seleccionado";
+            document.getElementById("metodoPago").innerText = metodoPago;
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let summaryContainer = document.getElementById("order-summary");
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                summaryContainer.innerHTML = "<p>Tu carrito está vacío.</p>";
+                document.getElementById("total-price").innerText = "Total a Pagar: $0.00";
+                return;
+            }
+
+            summaryContainer.innerHTML = "";
+            cart.forEach((product) => {
+                let itemTotal = product.price * product.quantity;
+                totalPrice += itemTotal;
+                let itemDiv = document.createElement("div");
+                itemDiv.innerHTML = `<p><strong>${product.id === "CremaPollo" ? "Crema de Plátano con Pollo" : "Crema de Plátano con Camarones"}</strong> - Cantidad: ${product.quantity} - Total: $${itemTotal.toFixed(2)}</p>`;
+                summaryContainer.appendChild(itemDiv);
+            });
+
+            document.getElementById("total-price").innerText = `Total a Pagar: $${totalPrice.toFixed(2)}`;
+        });
+
+        function confirmarOrden() {
+            let numeroOrden = Math.floor(Math.random() * 1000000);
+            localStorage.setItem("numeroOrden", numeroOrden);
+            window.location.href = "orden-confirmada.html";
+        }
+    </script>
+</head>
+<body>
+    <h1>Resumen de la Orden</h1>
+    <div class="container">
+        <p>Método de Pago: <strong id="metodoPago">Cargando...</strong></p>
+        <div id="order-summary" class="cart-summary">
+            <p>Cargando orden...</p>
+        </div>
+        <h2 id="total-price">Total a Pagar: $0.00</h2>
+        <button class="button" onclick="confirmarOrden()">✅ Confirmar Orden</button>
+        <a href="pago.html" class="button">⬅ Volver a Método de Pago
